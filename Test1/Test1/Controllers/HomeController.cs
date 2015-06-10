@@ -1,27 +1,37 @@
 ﻿using MongoDB.Driver;
 using System.Web.Mvc;
+using Test1.Models;
 using Test1.Properties;
 
 namespace Test1.Controllers
 {
     public class HomeController : Controller
     {
-        MongoDbContext _context;
+        readonly MongoDbContext _context;
         public HomeController()
         {
             _context = new MongoDbContext();
         }
         public ActionResult Index()
         {
-            _context.Database.GetStats();
-            return Json(_context.Database.Server.BuildInfo, JsonRequestBehavior.AllowGet);
+            var rentals = _context.Rentals.FindAll();
+
+            return View(rentals);
         }
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult About(PostRental postRental)
+        {
+            var rental = new Rental(postRental);
+            _context.Rentals.Insert(rental);
+
+
+            return RedirectToAction("Index");
         }
 
         public ActionResult Contact()

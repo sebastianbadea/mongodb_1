@@ -1,8 +1,5 @@
 ﻿using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using Test1.Models;
 using Test1.Properties;
 
 namespace Test1
@@ -16,6 +13,14 @@ namespace Test1
             var server = client.GetServer();
             //Database = client.GetDatabase(Settings.Default.databaseName);
             Database = server.GetDatabase(Settings.Default.databaseName);
+        }
+
+        public MongoCollection<Rental> Rentals
+        { 
+            get 
+            {
+                return Database.GetCollection<Rental>("rentals");
+            } 
         }
     }
 }
